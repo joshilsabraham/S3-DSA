@@ -40,6 +40,28 @@ void displayMatrix(int matrix[MAX][3], int count, int rows, int cols) {
     }
 }
 
+void transposeMatrix(int original[MAX][3], int transpose[MAX][3]) {
+    int i, j, k = 1;
+    int rows = original[0][0];
+    int cols = original[0][1];
+    int nonZero = original[0][2];
+
+    transpose[0][0] = cols;
+    transpose[0][1] = rows;
+    transpose[0][2] = nonZero;
+
+    for(i = 0; i < cols; i++) {
+        for(j = 1; j <= nonZero; j++) {
+            if(original[j][1] == i) {
+                transpose[k][0] = original[j][1];
+                transpose[k][1] = original[j][0];
+                transpose[k][2] = original[j][2];
+                k++;
+            }
+        }
+    }
+}
+
 int main() {
     int sparse1[MAX][MAX], sparse2[MAX][MAX];
     int matrix1[MAX][3], matrix2[MAX][3], result[MAX][3];
@@ -121,6 +143,12 @@ int main() {
 
     printf("\nResultant matrix after addition\n");
     displayMatrix(result, k, rows1, cols1);
+
+    int transposed[MAX][3];
+    transposeMatrix(result, transposed);
+
+    printf("\nTranspose of the resultant matrix\n");
+    displayMatrix(transposed, transposed[0][2] + 1, transposed[0][0], transposed[0][1]);
 
     return 0;
 }
