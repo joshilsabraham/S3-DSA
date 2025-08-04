@@ -41,7 +41,7 @@ void displayMatrix(int matrix[MAX][3], int count, int rows, int cols) {
 }
 
 void transposeMatrix(int original[MAX][3], int transpose[MAX][3]) {
-    int i, j, k = 1;
+    int i;
     int rows = original[0][0];
     int cols = original[0][1];
     int nonZero = original[0][2];
@@ -50,15 +50,10 @@ void transposeMatrix(int original[MAX][3], int transpose[MAX][3]) {
     transpose[0][1] = rows;
     transpose[0][2] = nonZero;
 
-    for(i = 0; i < cols; i++) {
-        for(j = 1; j <= nonZero; j++) {
-            if(original[j][1] == i) {
-                transpose[k][0] = original[j][1];
-                transpose[k][1] = original[j][0];
-                transpose[k][2] = original[j][2];
-                k++;
-            }
-        }
+    for(i = 1; i <= nonZero; i++) {
+        transpose[i][0] = original[i][1]; // swap row and column
+        transpose[i][1] = original[i][0];
+        transpose[i][2] = original[i][2];
     }
 }
 
