@@ -17,7 +17,7 @@ void appendFront(){
 	    front = 0;
 	}
 	rear++;
-	queue[front] = value;
+	dequeue[front] = value;
     }
 }
 
@@ -26,7 +26,7 @@ void deleteFront() {
         printf("Underflow\n");
     }
     else {
-        printf("Deleted element is %d\n", queue[front]);
+        printf("Deleted element is %d\n", dequeue[front]);
         if (front == rear) {
             front = rear = -1;
         }
@@ -48,7 +48,7 @@ void appendRear(){
 		    front = 0;
 		}
 		rear++;
-		queue[rear] = value;
+		dequeue[rear] = value;
 	    }
 }
 
@@ -57,7 +57,7 @@ void deleteRear(){
         printf("Underflow\n");
     }
     else {
-        printf("Deleted element is %d\n", queue[rear]);
+        printf("Deleted element is %d\n", dequeue[rear]);
         if (front == rear) {
             front = rear = -1;
         }
@@ -73,7 +73,7 @@ void display(){
     else{
         printf("Queue elements: ");
     	for(int i=front;i<=rear;i++){
-    		printf("%d\t",queue[i]);
+    		printf("%d\t",dequeue[i]);
     	}
     	printf("\n");
     }
