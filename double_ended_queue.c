@@ -95,7 +95,7 @@ int main(){
             		appendRear();
             	}
         }
-        else-if(choice==2) {
+        else if(choice==2) {
 		int delete;
 		printf("\n1.Front\n2.Rear\n");
             	scanf("%d",&delete)
@@ -106,10 +106,10 @@ int main(){
             		deleteRear();
             	} 
         }
-        if-else(choice==3){
+        else if(choice==3){
                 display();
         }
-        else-if(choice==4){
+        else if(choice==4){
         	printf("Exiting...\n");
                 break;
         }
