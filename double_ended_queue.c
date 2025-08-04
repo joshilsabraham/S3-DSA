@@ -7,19 +7,19 @@ int front=-1;
 int rear=-1;
 
 void appendFront(){
-    if (rear == max - 1) {
+    if (front == 0 || (front == -1 && rear == max - 1)) { // No space at front
         printf("Overflow\n");
     }
     else {
         int value;
-	printf("Enter the number: ");
-	scanf("%d", &value);
+        printf("Enter the number: ");
+        scanf("%d", &value);
         if (front == -1) { // Queue was empty
-	    front = 0;
-	} else{
-		front--;
-	}
-	dequeue[front] = value;
+            front = rear = 0;
+        } else {
+            front--;
+        }
+        dequeue[front] = value;
     }
 }
 
@@ -39,19 +39,21 @@ void deleteFront() {
 }
 
 void appendRear(){
-	if (rear == max - 1) {
-		printf("Overflow\n");
-	    }
-	    else {
-		int value;
-		printf("Enter the number: ");
-		scanf("%d", &value);
-		if (front == -1) { // Queue was empty
-		    front = 0;
-		}
-		rear++;
-		dequeue[rear] = value;
-	    }
+    if (rear == max - 1) {
+        printf("Overflow\n");
+    }
+    else {
+        int value;
+        printf("Enter the number: ");
+        scanf("%d", &value);
+        if (front == -1) { // Queue was empty
+            front = rear = 0;
+        }
+        else {
+            rear++;
+        }
+        dequeue[rear] = value;
+    }
 }
 
 void deleteRear(){
