@@ -15,8 +15,9 @@ void appendFront(){
 	scanf("%d", &value);
         if (front == -1) { // Queue was empty
 	    front = 0;
+	} else{
+		front--;
 	}
-	rear++;
 	dequeue[front] = value;
     }
 }
