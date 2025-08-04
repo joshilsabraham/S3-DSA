@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #define max 10
 
 int dequeue[max];
@@ -112,13 +113,16 @@ void menu(){
         }
         else if(choice==4){
         	printf("Exiting...\n");
-                exit();
+                exit(0);
         }
         else{
         	printf("Invalid choice\n");
         }
 }
 int main(){
-	menu();
+	int n=0;
+	while (n==0){
+		menu();
+	}
 	return 0;
 }
