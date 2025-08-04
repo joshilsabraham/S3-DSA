@@ -79,7 +79,7 @@ void display(){
     }
 }	
 
-int main(){
+void menu(){
 	int choice;
 	printf("\n1. Insertion\n2. Deletion\n3. Display\n4. Exit\n");
         printf("Enter your choice: ");
@@ -111,10 +111,13 @@ int main(){
         }
         else if(choice==4){
         	printf("Exiting...\n");
-                break;
+                exit();
         }
         else{
         	printf("Invalid choice\n");
         }
+}
+int main(){
+	menu();
 	return 0;
 }
