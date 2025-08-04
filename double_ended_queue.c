@@ -87,7 +87,7 @@ int main(){
 	if(choice==1) {
 		int insert;
 		printf("\n1.Front\n2.Rear\n");
-            	scanf("%d",&insert)
+            	scanf("%d",&insert);
                 if(insert==1){
                 	appendFront();
                 }
@@ -98,7 +98,7 @@ int main(){
         else if(choice==2) {
 		int delete;
 		printf("\n1.Front\n2.Rear\n");
-            	scanf("%d",&delete)
+            	scanf("%d",&delete);
                 if(delete==1){
                 	deleteFront();
                 }
