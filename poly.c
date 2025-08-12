@@ -1,86 +1,69 @@
 #include <stdio.h>
-struct term{
+
+#define MAX 100
+
+
+struct term {
     int coeff;
-    int exp;
+    int degree;
 };
-int main(){
-    int i,j,k;
-    printf("Input Degree of First Polynomial: ");
-    scanf("%d",&i);
-    printf("Input Degree of Second Polynomial: ");
-    scanf("%d",&j);
-    i > j ? (k = i) : (k = j); 
-    struct term poly1[i], poly2[j],result[k];
+
+
+struct term poly1[MAX], poly2[MAX], poly3[MAX];
+
+int main() {
+    int n1, n2, i, j, k;
+
     
+    printf("Enter the number of terms in the first polynomial: ");
+    scanf("%d", &n1);
+    printf("Enter the number of terms in the second polynomial: ");
+    scanf("%d", &n2);
+
     
-    enter the coeffient and exponent in terms
-    
-    
- #include<stdio.h>
-struct poly{
-int coef;
-int expo;
-}p1[10],p2[10],p3[10];
-int main(){
-  int i=0,j=0,k=0,term1,term2;
-  printf("FIRST POLYNOMIAL\n");
-  printf("Enter the NO: OF TERMS:");
-  scanf("%d",&term1);
-  for (i=0;i<term1;i++){
-    printf("Enter the coefficient of %d term in polynomial",i+1);
-    scanf("%d",&p1[i].coef);
-    printf("Enter the power of %d term in the polynomial",i+1);
-    scanf("%d",&p1[i].expo);
+    printf("Enter degree and coefficient for the first polynomial (highest to lowest degree):\n");
+    for (i = 0; i < n1; i++) {
+        printf("Term %d: ", i + 1);
+        scanf("%d %d", &poly1[i].degree, &poly1[i].coeff);
     }
+
     
-  printf("SECOND POLYNOMIAL\n");
-  printf("Enter the NO: OF TERMS:");
-  scanf("%d",&term2);
-  for (j=0;j<term2;j++){
-    printf("Enter the coefficient of %d term in polynomial",j+1);
-    scanf("%d",&p2[j].coef);
-    printf("Enter the power of %d term in the polynomial",j+1);
-    scanf("%d",&p2[j].expo);
+    printf("Enter degree and coefficient for the second polynomial (highest to lowest degree):\n");
+    for (i = 0; i < n2; i++) {
+        printf("Term %d: ", i + 1);
+        scanf("%d %d", &poly2[i].degree, &poly2[i].coeff);
     }
-  i=j=0;
-    while(i<term1&&j<term2){
-      
-      if(p1[i].expo==p2[j].expo){
-        p3[k].coef=p1[i].coef+p2[j].coef;
-        p3[k].expo=p1[i].expo;
-        k=k+1,i++,j++;
+
+    
+    i = j = k = 0;
+    while (i < n1 && j < n2) {
+        if (poly1[i].degree == poly2[j].degree) {
+            poly3[k].degree = poly1[i].degree;
+            poly3[k].coeff = poly1[i].coeff + poly2[j].coeff;
+            i++; j++; k++;
+        } else if (poly1[i].degree > poly2[j].degree) {
+            poly3[k] = poly1[i];
+            i++; k++;
+        } else {
+            poly3[k] = poly2[j];
+            j++; k++;
         }
-        
-        else if(p1[i].expo>p2[j].expo){
-        p3[k].coef=p1[i].coef;
-        p3[k].expo=p1[i].expo;
-        k++,i++;
+    }
+
+    
+    while (i < n1) poly3[k++] = poly1[i++];
+    while (j < n2) poly3[k++] = poly2[j++];
+
+    
+    printf("\nResulting Polynomial:\n");
+    for (i = 0; i < k; i++) {
+        if (poly3[i].coeff != 0) {
+            printf("%dx^%d", poly3[i].coeff, poly3[i].degree);
+            if (i < k - 1)
+                printf(" + ");
         }
-        else{
-          p3[k].coef=p2[j].coef;
-          p3[k].expo=p2[j].expo;
-          k++,j++;
-          }
-      }
-    
-    
-    while(i<term1){
-    p3[k].coef=p1[i].coef;
-    p3[k].expo=p1[i].expo;
-    i++,k++;
     }
-    
-    while(j<term2){
-    p3[k].coef=p2[j].coef;
-    p3[k].expo=p2[j].expo;
-    j++,k++;
-    }
-    
-    for(int a=0;a<k;a++){
-    printf(" %dX^%d ",p3[a].coef,p3[a].expo);
-    
-    if(a<k-1){
-    printf("+"); }
-    }
-  return 0;
+    printf("\n");
+
+    return 0;
 }
