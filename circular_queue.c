@@ -1,113 +1,98 @@
 #include <stdio.h>
-#define Max 100
+#define MAX 5
 
-char stack[Max];
-int top = -1;
+struct Queue {
+    int arr[MAX];
+    int front, rear;
+};
 
-void push(char c) {
-    if (top < Max - 1) {
-        top++;
-        stack[top] = c;
-    }
+void initQueue(struct Queue* q) {
+    q->front = -1;
+    q->rear = -1;
 }
 
-char pop() {
-    if (top >= 0) {
-        return stack[top--];
-    }
-    return '\0';
+int isEmpty(struct Queue* q) {
+    return (q->front == -1);
 }
 
-char peek() {
-    if (top >= 0)
-        return stack[top];
-    return '\0';
+int isFull(struct Queue* q) {
+    return ((q->rear + 1) % MAX == q->front);
 }
 
-int isOperator(char c) {
-    return (c == '+' || c == '-' || c == '*' || c == '/' || c == '^');
-}
-
-int precedence(char op) {
-    if (op == '^') return 3;
-    if (op == '*' || op == '/') return 2;
-    if (op == '+' || op == '-') return 1;
-    return 0;
-}
-
-int isDigit(char c) {
-    return (c >= '0' && c <= '9');
-}
-
-void infixtoPostfix(char infix[], char postfix[]) {
-    int i = 0, j = 0;
-    char ch;
-    while ((ch = infix[i++]) != '\0') {
-        if (isDigit(ch)) {
-            postfix[j++] = ch;
-        } else if (ch == '(') {
-            push(ch);
-        } else if (ch == ')') {
-            while (peek() != '(' && top != -1) {
-                postfix[j++] = pop();
-            }
-            pop(); // remove '('
-        } else if (isOperator(ch)) {
-            while (top != -1 && precedence(peek()) >= precedence(ch)) {
-                postfix[j++] = pop();
-            }
-            push(ch);
+void enqueue(struct Queue* q, int value) {
+    if (isFull(q)) {
+        printf("Queue is full. Cannot enqueue %d\n", value);
+    } else {
+        if (q->front == -1) {
+            q->front = 0;
         }
+        q->rear = (q->rear + 1) % MAX;
+        q->arr[q->rear] = value;
+        printf("Enqueued %d\n", value);
     }
-
-    while (top != -1) {
-        postfix[j++] = pop();
-    }
-    postfix[j] = '\0';
 }
 
-int evaluatePostfix(char postfix[]) {
-    int evalStack[Max];
-    int evalTop = -1;
-    int i = 0, op1, op2, result;
-    char ch;
-
-    while ((ch = postfix[i++]) != '\0') {
-        if (isDigit(ch)) {
-            evalStack[++evalTop] = ch - '0';
-        } else if (isOperator(ch)) {
-            op2 = evalStack[evalTop--];
-            op1 = evalStack[evalTop--];
-
-            switch (ch) {
-                case '+': result = op1 + op2; break;
-                case '-': result = op1 - op2; break;
-                case '*': result = op1 * op2; break;
-                case '/': result = op1 / op2; break;
-                case '^': {
-                    result = 1;
-                    for (int j = 0; j < op2; j++)
-                        result *= op1;
-                    break;
-                }
-            }
-            evalStack[++evalTop] = result;
+int dequeue(struct Queue* q) {
+    if (isEmpty(q)) {
+        printf("Queue is empty. Cannot dequeue\n");
+        return -1;
+    } else {
+        int value = q->arr[q->front];
+        if (q->front == q->rear) {
+            q->front = -1;
+            q->rear = -1;
+        } else {
+            q->front = (q->front + 1) % MAX;
         }
+        printf("Dequeued %d\n", value);
+        return value;
+    }
+}
+
+int peek(struct Queue* q) {
+    if (isEmpty(q)) {
+        printf("Queue is empty!\n");
+        return -1;
+    } else {
+        return q->arr[q->front];
+    }
+}
+
+void displayQueue(struct Queue* q) {
+    if (isEmpty(q)) {
+        printf("Queue is empty!\n");
+        return;
     }
 
-    return evalStack[evalTop];
+    int i = q->front;
+    printf("Queue elements: ");
+    while (i != q->rear) {
+        printf("%d ", q->arr[i]);
+        i = (i + 1) % MAX;
+    }
+    printf("%d\n", q->arr[q->rear]);
 }
 
 int main() {
-    char infix[Max], postfix[Max];
+    struct Queue q;
+    initQueue(&q);
 
-    printf("Enter infix expression: ");
-    scanf("%s", infix);
+    enqueue(&q, 10);
+    enqueue(&q, 20);
+    enqueue(&q, 30);
+    enqueue(&q, 40);
+    enqueue(&q, 50);
 
-    infixtoPostfix(infix, postfix);
+    displayQueue(&q);
 
-    printf("Postfix expression: %s\n", postfix);
-    printf("Evaluated result: %d\n", evaluatePostfix(postfix));
+    enqueue(&q, 60);
+
+    dequeue(&q);
+    displayQueue(&q);
+
+    enqueue(&q, 60);
+    displayQueue(&q);
 
     return 0;
 }
+
