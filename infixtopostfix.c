@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <ctype.h>
 #define Max 100
 
 char stack[Max];
@@ -6,8 +7,7 @@ int top = -1;
 
 void push(char c) {
     if (top < Max - 1) {
-        top++;
-        stack[top] = c;
+        stack[++top] = c;
     }
 }
 
@@ -35,15 +35,16 @@ int precedence(char op) {
     return 0;
 }
 
-int isDigit(char c) {
-    return (c >= '0' && c <= '9');
+int isOperand(char c) {
+    return isalnum(c); // Accepts digits and letters
 }
 
 void infixtoPostfix(char infix[], char postfix[]) {
     int i = 0, j = 0;
     char ch;
+    top = -1; // Reset stack for each conversion
     while ((ch = infix[i++]) != '\0') {
-        if (isDigit(ch)) {
+        if (isOperand(ch)) {
             postfix[j++] = ch;
         } else if (ch == '(') {
             push(ch);
@@ -51,7 +52,8 @@ void infixtoPostfix(char infix[], char postfix[]) {
             while (peek() != '(' && top != -1) {
                 postfix[j++] = pop();
             }
-            pop(); // remove '('
+            if (peek() == '(')
+                pop(); // remove '('
         } else if (isOperator(ch)) {
             while (top != -1 && precedence(peek()) >= precedence(ch)) {
                 postfix[j++] = pop();
@@ -59,11 +61,22 @@ void infixtoPostfix(char infix[], char postfix[]) {
             push(ch);
         }
     }
-
     while (top != -1) {
         postfix[j++] = pop();
     }
     postfix[j] = '\0';
+}
+
+int canEvaluate(char postfix[]) {
+    // Returns 1 if all operands are digits, else 0
+    int i = 0;
+    char ch;
+    while ((ch = postfix[i++]) != '\0') {
+        if (isOperand(ch) && !isdigit(ch)) {
+            return 0;
+        }
+    }
+    return 1;
 }
 
 int evaluatePostfix(char postfix[]) {
@@ -73,9 +86,13 @@ int evaluatePostfix(char postfix[]) {
     char ch;
 
     while ((ch = postfix[i++]) != '\0') {
-        if (isDigit(ch)) {
+        if (isdigit(ch)) {
             evalStack[++evalTop] = ch - '0';
         } else if (isOperator(ch)) {
+            if (evalTop < 1) {
+                printf("Error: Insufficient operands\n");
+                return 0;
+            }
             op2 = evalStack[evalTop--];
             op1 = evalStack[evalTop--];
 
@@ -83,16 +100,26 @@ int evaluatePostfix(char postfix[]) {
                 case '+': result = op1 + op2; break;
                 case '-': result = op1 - op2; break;
                 case '*': result = op1 * op2; break;
-                case '/': result = op1 / op2; break;
-                case '^': {
+                case '/': 
+                    if (op2 == 0) {
+                        printf("Error: Division by zero\n");
+                        return 0;
+                    }
+                    result = op1 / op2; 
+                    break;
+                case '^': 
                     result = 1;
                     for (int j = 0; j < op2; j++)
                         result *= op1;
                     break;
-                }
             }
             evalStack[++evalTop] = result;
         }
+    }
+
+    if (evalTop != 0) {
+        printf("Error: Invalid postfix expression\n");
+        return 0;
     }
 
     return evalStack[evalTop];
@@ -107,7 +134,12 @@ int main() {
     infixtoPostfix(infix, postfix);
 
     printf("Postfix expression: %s\n", postfix);
-    printf("Evaluated result: %d\n", evaluatePostfix(postfix));
+
+    if (canEvaluate(postfix)) {
+        printf("Evaluated result: %d\n", evaluatePostfix(postfix));
+    } else {
+        printf("Evaluation skipped: Expression contains non-numeric operands.\n");
+    }
 
     return 0;
 }
